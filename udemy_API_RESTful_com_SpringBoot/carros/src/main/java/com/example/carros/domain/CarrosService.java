@@ -2,10 +2,10 @@ package com.example.carros.domain;
 
 import com.example.carros.domain.dto.CarroDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,7 +17,7 @@ public class CarrosService {
     private CarroRepository repo;
 
     public List<CarroDto> getCarros(){
-        return repo.findAll().stream().map(CarroDto::create).collect(Collectors.toList());
+        return repo.findAll(Sort.by(Sort.Direction.ASC, "name")).stream().map(CarroDto::create).collect(Collectors.toList());
     }
 
     public Optional<CarroDto> getCarroById(Long id){
@@ -36,7 +36,6 @@ public class CarrosService {
 
     public List<CarroDto> getCarroByType(String tipo) {
         return repo.findByType(tipo).stream().map(CarroDto::create).collect(Collectors.toList());
-
     }
 
     public CarroDto saveCarro(Carro carro) {
@@ -44,14 +43,16 @@ public class CarrosService {
         return CarroDto.create(repo.save(carro));
     }
 
-    public Carro updateCarro(Carro carro, Long id) {
+    public CarroDto updateCarro(Carro carro, Long id) {
 
         Assert.notNull(id, "Carro não existe");
 
         Optional<Carro> carroUpdate = repo.findById(id);
 
-        if(!carroUpdate.isPresent())
-            throw new RuntimeException("Carro não existe");
+        if(!carroUpdate.isPresent()){
+            return null;
+            //throw new RuntimeException("Carro não existe");
+        }
 
         Carro db = carroUpdate.get();
         db.setName(carro.getName());
@@ -60,12 +61,15 @@ public class CarrosService {
 
         repo.save(db);
 
-        return db;
+        return CarroDto.create(db);
     }
 
-    public void deleteCarro(Long id) {
+    public boolean deleteCarro(Long id) {
         Optional<CarroDto> carro = getCarroById(id);
-        if (carro.isPresent())
-            repo.deleteById(id);
+        if (!carro.isPresent())
+            return false;
+
+        repo.deleteById(id);
+        return true;
     }
 }
