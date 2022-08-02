@@ -8,10 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.Servlet;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/carros")
@@ -28,16 +26,10 @@ public class CarrosController {
 
     @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id){
-        var optional = service.getCarroById(id);
+        var carroDto = service.getCarroById(id);
 
         // forma com lambda
-        return optional.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-
-        // uma das formas de fazer, forma simples!
-//        if(optional.isPresent())
-//            return ResponseEntity.ok(optional.get());
-//
-//        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(carroDto);
     }
 
     @GetMapping("/tipo/{tipo}")
@@ -52,13 +44,11 @@ public class CarrosController {
 
     @PostMapping()
     public ResponseEntity Post(@RequestBody Carro carro){
-        try {
+
             CarroDto c = service.saveCarro(carro);
             var location = getUri(c.getId());
             return ResponseEntity.created(location).build();
-        }catch(Exception ex){
-            return ResponseEntity.badRequest().build();
-        }
+
     }
 
     private URI getUri(Long id){
@@ -84,11 +74,10 @@ public class CarrosController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity Delete(@PathVariable("id") Long id) {
-        var response = service.deleteCarro(id);
-        if(response)
-            return ResponseEntity.noContent().build();
 
-        return ResponseEntity.notFound().build();
+        service.deleteCarro(id);
+        return ResponseEntity.noContent().build();
+
     }
 
 }
