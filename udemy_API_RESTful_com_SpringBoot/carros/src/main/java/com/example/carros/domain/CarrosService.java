@@ -1,5 +1,6 @@
 package com.example.carros.domain;
 
+import com.example.carros.api.exception.ObjectNotFoundException;
 import com.example.carros.domain.dto.CarroDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -20,8 +21,9 @@ public class CarrosService {
         return repo.findAll(Sort.by(Sort.Direction.ASC, "name")).stream().map(CarroDto::create).collect(Collectors.toList());
     }
 
-    public Optional<CarroDto> getCarroById(Long id){
-        return repo.findById(id).map(CarroDto::create);
+    public CarroDto getCarroById(Long id){
+        Optional<Carro> carro = repo.findById(id);
+        return carro.map(CarroDto::create).orElseThrow(() -> new ObjectNotFoundException("Carro não encontrado"));
     }
 
 //    public List<Carro> getCarrosFake(){
@@ -64,12 +66,7 @@ public class CarrosService {
         return CarroDto.create(db);
     }
 
-    public boolean deleteCarro(Long id) {
-        Optional<CarroDto> carro = getCarroById(id);
-        if (!carro.isPresent())
-            return false;
-
+    public void deleteCarro(Long id) {
         repo.deleteById(id);
-        return true;
     }
 }
