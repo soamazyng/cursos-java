@@ -1,14 +1,37 @@
 package br.com.upmasters.domain.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
+@Entity
 public class Pedido {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
+
+  @ManyToOne
+  @JoinColumn(name = "cliente_id")
   private Cliente cliente;
+
+  @Column(name = "data_pedido")
   private LocalDate dataPedido;
+
+  @Column(length = 20, precision = 2)
   private BigDecimal total;
+
+  @OneToMany(mappedBy = "pedido")
+  private List<ItemPedido> itens;
+
+  public List<ItemPedido> getItens() {
+    return itens;
+  }
+
+  public void setItens(List<ItemPedido> itens) {
+    this.itens = itens;
+  }
 
   public Pedido(Integer id, Cliente cliente, LocalDate dataPedido, BigDecimal total) {
     this.id = id;

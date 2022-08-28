@@ -1,15 +1,36 @@
 package br.com.upmasters.domain.entity;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.Set;
 
+@Entity
 public class Cliente {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
   private Integer id;
+  @Column(length = 100)
   private String nome;
+
+  @OneToMany(mappedBy = "cliente")
+  private Set<Pedido> pedidos;
+
+  public Cliente() {
+  }
 
   public Cliente(Integer id, String nome) {
     this.id = id;
     this.nome = nome;
+  }
+
+  public Set<Pedido> getPedidos() {
+    return pedidos;
+  }
+
+  public void setPedidos(Set<Pedido> pedidos) {
+    this.pedidos = pedidos;
   }
 
   public Cliente(String nome) {

@@ -25,34 +25,36 @@ public class VendasApplication {
     configuration.logger().info("Acesso o Bean");
 
     return args -> {
-      Cliente cliente = new Cliente("Jay");
-      clientes.salvar(cliente);
+      Cliente cliente = new Cliente("Jay Benedicto");
+      clientes.save(cliente);
 
-      Cliente cliente2 = new Cliente( "Jay 2");
-      clientes.salvar(cliente2);
+      Cliente cliente2 = new Cliente( "Novo Cliente");
+      clientes.save(cliente2);
 
-      var clientesList = clientes.ObterTodos();
+      var clientesList = clientes.findAll();
 
       clientesList.forEach(System.out::println);
 
       clientesList.forEach(c-> {
         c.setNome((c.getNome() + " atualizado"));
-        clientes.atualizar(c);
+        clientes.save(c);
       });
 
-      clientesList = clientes.ObterTodos();
+      clientesList = clientes.findAll();
 
       System.out.println();
 
       clientesList.forEach(System.out::println);
 
-      clientes.BuscarPeloNome("Jay").forEach(c-> System.out.println(c));
+      System.out.println("Buscando clientes ....");
+
+      clientes.encontrarPorNome("Jay").forEach(c-> System.out.println(c));
 
       System.out.println();
 
-      clientes.ObterTodos().forEach(c -> clientes.deletar(c));
+      clientes.findAll().forEach(c -> clientes.delete(c));
 
-      clientesList = clientes.ObterTodos();
+      clientesList = clientes.findAll();
 
       System.out.println("clientes deletados");
 
