@@ -1,11 +1,19 @@
 package br.com.upmasters.domain.entity;
 
+import br.com.upmasters.domain.enums.StatusPedido;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pedido {
 
   @Id
@@ -17,58 +25,14 @@ public class Pedido {
   private Cliente cliente;
 
   @Column(name = "data_pedido")
-  private LocalDate dataPedido;
+  private LocalDateTime dataPedido;
 
-  @Column(length = 20, precision = 2)
+  @Column(precision = 20, scale = 2)
   private BigDecimal total;
+
+  @Enumerated(EnumType.STRING)
+  private StatusPedido status;
 
   @OneToMany(mappedBy = "pedido")
   private List<ItemPedido> itens;
-
-  public List<ItemPedido> getItens() {
-    return itens;
-  }
-
-  public void setItens(List<ItemPedido> itens) {
-    this.itens = itens;
-  }
-
-  public Pedido(Integer id, Cliente cliente, LocalDate dataPedido, BigDecimal total) {
-    this.id = id;
-    this.cliente = cliente;
-    this.dataPedido = dataPedido;
-    this.total = total;
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public Cliente getCliente() {
-    return cliente;
-  }
-
-  public void setCliente(Cliente cliente) {
-    this.cliente = cliente;
-  }
-
-  public LocalDate getDataPedido() {
-    return dataPedido;
-  }
-
-  public void setDataPedido(LocalDate dataPedido) {
-    this.dataPedido = dataPedido;
-  }
-
-  public BigDecimal getTotal() {
-    return total;
-  }
-
-  public void setTotal(BigDecimal total) {
-    this.total = total;
-  }
 }
