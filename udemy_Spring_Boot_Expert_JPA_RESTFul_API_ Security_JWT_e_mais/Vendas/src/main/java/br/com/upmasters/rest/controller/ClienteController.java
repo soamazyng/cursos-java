@@ -2,22 +2,25 @@ package br.com.upmasters.rest.controller;
 
 import br.com.upmasters.domain.entity.Cliente;
 import br.com.upmasters.domain.repository.ClientesRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.upmasters.exception.NotFoundDataException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+
 @RestController
 @RequestMapping("/api/clientes")
+@RequiredArgsConstructor
 public class ClienteController {
 
-  @Autowired
-  private ClientesRepository clientesRepository;
+  private static final String CLIENTE_NAO_ENCONTRADO = "Cliente não encontrado";
+  private final ClientesRepository clientesRepository;
 
   @GetMapping("{id}")
   public Cliente getCliente(@PathVariable Integer id) {
@@ -27,41 +30,42 @@ public class ClienteController {
     if (cliente.isPresent())
       return cliente.get();
 
-    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado");
+    throw new NotFoundDataException(CLIENTE_NAO_ENCONTRADO);
   }
 
   @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
+  @ResponseStatus(CREATED)
   public Cliente saveCliente(@RequestBody Cliente cliente) {
-    Cliente clienteSalvo = clientesRepository.save(cliente);
-    return clienteSalvo;
+    return clientesRepository.save(cliente);
   }
 
   @DeleteMapping("{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ResponseStatus(NO_CONTENT)
   public void deleteCliente(@PathVariable Integer id) {
     Optional<Cliente> cliente = clientesRepository.findById(id);
 
-    if (!cliente.isPresent())
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado");
+    if (cliente.isEmpty())
+      throw new NotFoundDataException(CLIENTE_NAO_ENCONTRADO);
 
     clientesRepository.delete(cliente.get());
   }
 
   @PutMapping("{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ResponseStatus(NO_CONTENT)
   public void atualizarCliente(@PathVariable Integer id
       , @RequestBody Cliente cliente) {
 
-    clientesRepository
+    Optional<Cliente> clienteAtualizado = clientesRepository
         .findById(id)
         .map(c -> {
           cliente.setId(c.getId());
           clientesRepository.save(cliente);
           return c;
-        })
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
-            , "Cliente não encontrado"));
+        });
+
+    if (clienteAtualizado.isEmpty())
+      throw new NotFoundDataException(CLIENTE_NAO_ENCONTRADO);
+
   }
 
   @GetMapping
@@ -78,9 +82,8 @@ public class ClienteController {
     // e enviado para o findall retornando o que foi encontrado
     Example<Cliente> example = Example.of(filtro, matcher);
 
-    List<Cliente> listaClientes = clientesRepository.findAll(example);
+    return clientesRepository.findAll(example);
 
-    return listaClientes;
   }
 
 }
