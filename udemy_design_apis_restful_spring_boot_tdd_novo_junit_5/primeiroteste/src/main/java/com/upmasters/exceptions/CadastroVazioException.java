@@ -1,2 +1,4 @@
-package com.upmasters.exceptions;public class CadastroVazioException {
+package com.upmasters.exceptions;
+
+public class CadastroVazioException extends RuntimeException {
 }

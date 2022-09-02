@@ -1,2 +1,8 @@
-package com.upmasters;public class App {
+package com.upmasters;
+
+public class App {
+  
+  public static void main ( String[] args){
+    System.out.println("Hello World!");
+  }
 }

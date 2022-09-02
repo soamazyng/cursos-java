@@ -1,2 +1,4 @@
-package com.upmasters.exceptions;public class PessoaSemNomeException {
+package com.upmasters.exceptions;
+
+public class PessoaSemNomeException extends RuntimeException {
 }

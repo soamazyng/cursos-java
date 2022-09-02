@@ -1,2 +1,18 @@
-package com.upmasters;public class Pessoa {
+package com.upmasters;
+
+public class Pessoa {
+
+  private String nome;
+
+  public String getNome() {
+    return nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public Pessoa() {
+  }
+
 }
