@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +31,7 @@ public class PedidoController {
 
   @PostMapping
   @ResponseStatus(CREATED)
-  public Integer save(@RequestBody PedidoDto dto) {
+  public Integer save(@RequestBody @Valid PedidoDto dto) {
 
     Pedido pedido = pedidoService.salvar(dto);
 
@@ -75,10 +76,10 @@ public class PedidoController {
   @PatchMapping("{id}")
   @ResponseStatus(NO_CONTENT)
   public void updateStatus(@PathVariable Integer id,
-                           @RequestBody AtualizacaoStatusPedidoDTO atualizacaoStatusPedidoDTO) {
+                           @RequestBody @Valid AtualizacaoStatusPedidoDTO atualizacaoStatusPedidoDTO) {
 
     String novoStatus = atualizacaoStatusPedidoDTO.getNovoStatus();
     pedidoService.atualizaStatus(id, StatusPedido.valueOf(novoStatus));
-    
+
   }
 }
