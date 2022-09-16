@@ -8,6 +8,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +34,7 @@ public class ProdutoController {
 
   @PostMapping
   @ResponseStatus(CREATED)
-  public Produto saveProduto(@RequestBody Produto produto) {
+  public Produto saveProduto(@RequestBody @Valid Produto produto) {
     return produtosRepository.save(produto);
   }
 
@@ -52,7 +53,7 @@ public class ProdutoController {
 
   @PutMapping("{id}")
   @ResponseStatus(NO_CONTENT)
-  public void updateProduto(@PathVariable Integer id, @RequestBody Produto produto) {
+  public void updateProduto(@PathVariable Integer id, @RequestBody @Valid Produto produto) {
 
     Optional<Produto> produtoAtualizado = produtosRepository.findById(id).map(
         p -> {

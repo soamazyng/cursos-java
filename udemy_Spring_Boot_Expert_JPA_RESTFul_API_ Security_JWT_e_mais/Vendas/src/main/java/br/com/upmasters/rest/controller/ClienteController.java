@@ -8,6 +8,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class ClienteController {
 
   @PostMapping
   @ResponseStatus(CREATED)
-  public Cliente saveCliente(@RequestBody Cliente cliente) {
+  public Cliente saveCliente(@RequestBody @Valid Cliente cliente) {
     return clientesRepository.save(cliente);
   }
 
@@ -53,7 +54,7 @@ public class ClienteController {
   @PutMapping("{id}")
   @ResponseStatus(NO_CONTENT)
   public void atualizarCliente(@PathVariable Integer id
-      , @RequestBody Cliente cliente) {
+      , @RequestBody @Valid Cliente cliente) {
 
     Optional<Cliente> clienteAtualizado = clientesRepository
         .findById(id)
