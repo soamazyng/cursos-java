@@ -5,9 +5,13 @@ import br.com.upmasters.exception.NotFoundDataException;
 import br.com.upmasters.exception.PedidoNaoEncontradoException;
 import br.com.upmasters.exception.RegraNegocioException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApplicationControllerAdvice {
@@ -31,6 +35,18 @@ public class ApplicationControllerAdvice {
   public ApiErros handlePedidoNotFoundException(PedidoNaoEncontradoException ex) {
     String mensagemErro = ex.getMessage();
     return new ApiErros(mensagemErro);
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ApiErros handleMethodNotValidException(MethodArgumentNotValidException ex) {
+    List<String> errors = ex.getBindingResult()
+        .getAllErrors()
+        .stream()
+        .map(erro -> erro.getDefaultMessage())
+        .collect(Collectors.toList());
+
+    return new ApiErros(errors);
   }
 
 }
