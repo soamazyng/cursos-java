@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    console.path: /h2-console
+    console.enabled: true
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  thymeleaf:
+    cache: false
+
+security:
+  jwt:
+    expiracao: 30
+    chave-assinatura: YSBsZWJyZSDDqSBicmFuY2E=
