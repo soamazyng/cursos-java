@@ -11,13 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -34,6 +37,19 @@ public class BookController {
 
     var book = modelMapper.map(bookDTO, Book.class);
     final Book entity = service.save(book);
+    return modelMapper.map(entity, BookDTO.class);
+
+  }
+
+  @GetMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  public BookDTO get(@RequestParam Long id){
+
+    final Optional<Book> entity = service.getById(id);
+
+    if(entity.isEmpty())
+      throw new BusinessException("Livro com este ID não encontrado");
+
     return modelMapper.map(entity, BookDTO.class);
 
   }

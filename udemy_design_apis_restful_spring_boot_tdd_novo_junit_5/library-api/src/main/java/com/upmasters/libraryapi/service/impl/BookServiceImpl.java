@@ -7,6 +7,8 @@ import com.upmasters.libraryapi.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class BookServiceImpl implements BookService {
@@ -21,5 +23,10 @@ public class BookServiceImpl implements BookService {
 
     return repository.save(book);
     
+  }
+
+  @Override
+  public Optional<Book> getById(final Long id) {
+    return Optional.empty();
   }
 }
