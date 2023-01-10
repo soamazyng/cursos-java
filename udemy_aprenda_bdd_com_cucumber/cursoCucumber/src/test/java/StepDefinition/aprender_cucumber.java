@@ -59,19 +59,46 @@ private int contador = 0;
     cal.add(Calendar.DAY_OF_MONTH, int1);
     entrega = cal.getTime();
   }
-  @Then("a entrega serah efetuada em {int}\\/{int}\\/{int}")
-  public void aEntregaSerahEfetuadaEm(Integer dia, Integer mes, Integer ano) {
+  @Then("a entrega serah efetuada em {string}")
+  public void aEntregaSerahEfetuadaEm(String prazo) {
     DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
     String dataFormatada = format.format(entrega);
 
-    Calendar cal = Calendar.getInstance();
-    cal.set(Calendar.DAY_OF_MONTH, dia);
-    cal.set(Calendar.MONTH, mes - 1);
-    cal.set(Calendar.YEAR, ano);
-
-    String dataEntregaFormatada = format.format(cal.getTime());
-
-    assertEquals(dataEntregaFormatada, dataFormatada);
+    assertEquals(prazo, dataFormatada);
   }
+
+  @Given("que o ticket eh {word}")
+  public void queOTicketEh(String arg1) {
+
+  }
+
+  @Given("que o ticket especial eh {word}")
+  public void queOTicketEspecialEh(String arg1) {
+
+  }
+
+  @Given("que o valor da passagem eh R$ {double}")
+  public void queOValorDaPassagemEhR$(Double double1) {
+
+  }
+  @Given("que o nome do passageiro eh {string}")
+  public void queONomeDoPassageiroEh(String string) {
+
+  }
+  @Given("que o telefone do passageiro eh {int}-{int}")
+  public void queOTelefoneDoPassageiroeh(Integer int1, Integer int2) {
+
+  }
+  @When("criar os steps")
+  public void criarOsSteps() {
+
+  }
+  @Then("o teste vai funcionar")
+  public void oTesteVaiFuncionar() {
+
+  }
+
+
+
 
 }
