@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: hr-payroll
+
+server:
+  port: ${PORT:0}
+
+hr-worker:
+  ribbon:
+    ConnectTimeout: 10000
+    ReadTimeout: 20000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
