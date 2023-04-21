@@ -1,5 +1,6 @@
 package com.upmasters.libraryapi.repository;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.upmasters.libraryapi.entity.Book;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,12 +11,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @DataJpaTest
-public class BookRepositoryTest {
+class BookRepositoryTest {
 
   @Autowired
   TestEntityManager testEntityManager;
